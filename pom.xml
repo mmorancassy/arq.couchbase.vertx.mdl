@@ -18,7 +18,8 @@
   <properties>
   	<java.version>1.8</java.version>  
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-  	<couchbase.client>1.4.11</couchbase.client>
+  	<couchbase.client>2.0.3</couchbase.client>
+  	<vertx.version>3.0.0</vertx.version>
   </properties>
   
   <build>

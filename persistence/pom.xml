@@ -17,8 +17,8 @@
   <dependencies>
     <!-- Couchbase -->
 	<dependency>
-		<groupId>com.couchbase.client</groupId>
-		<artifactId>couchbase-client</artifactId>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
 		<version>${couchbase.client}</version>
 	</dependency>  
   </dependencies>
