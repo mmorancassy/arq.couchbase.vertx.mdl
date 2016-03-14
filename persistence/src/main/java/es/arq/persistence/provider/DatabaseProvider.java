@@ -1,5 +1,7 @@
 package es.arq.persistence.provider;
 
+import es.arq.persistence.provider.exceptions.PersistenceException;
+
 public interface DatabaseProvider {
 
 	public DatabaseProvider getConnection();
@@ -10,7 +12,7 @@ public interface DatabaseProvider {
 	 * @param document
 	 * @return
 	 */
-	public String insert(String document);
+	public String insert(String document) throws PersistenceException;
 	
 	/**
 	 * Deletes JSON document
@@ -18,7 +20,7 @@ public interface DatabaseProvider {
 	 * @param documentId
 	 * @return
 	 */
-	public String delete(String documentId);
+	public boolean delete(String documentId) throws PersistenceException;
 	
 	/**
 	 * Updates JSON document
@@ -26,7 +28,15 @@ public interface DatabaseProvider {
 	 * @param document
 	 * @return
 	 */
-	public String update(String document);
+	public String update(String document) throws PersistenceException;
+	
+	/**
+	 * Updates JSON document or creates if not exists
+	 * 
+	 * @param document
+	 * @return
+	 */
+	public String upsert(String document) throws PersistenceException;
 	
 	/**
 	 * Retrieves JSON document
@@ -34,5 +44,5 @@ public interface DatabaseProvider {
 	 * @param documentId
 	 * @return
 	 */
-	public String getDocument(String documentId);
+	public String query(String documentId) throws PersistenceException;
 }
