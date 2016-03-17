@@ -13,12 +13,26 @@
   <packaging>jar</packaging>
 
   <dependencies>
+  
     <!-- Couchbase -->
 	<dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
 		<version>${couchbase.client}</version>
 	</dependency>  
+	
+  	<!-- Logger -->
+  	<dependency>
+	  	<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+  	</dependency>
+  	
+	<!-- Test -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+	</dependency> 	
+	
   </dependencies>
  
 </project>

@@ -21,15 +21,28 @@
   	<couchbase.client>2.0.3</couchbase.client>
   	<vertx.version>3.0.0</vertx.version>
   	<sl4j.version>1.7.18</sl4j.version>
+  	<junit.version>4.12</junit.version>
   </properties>
   
-  <dependencies>
-  	<dependency>
-	  	<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-api</artifactId>
-		<version>${sl4j.version}</version>
-  	</dependency>
-  </dependencies>
+  <dependencyManagement>
+	  <dependencies>
+	  
+	  	<!-- Logger -->
+	  	<dependency>
+		  	<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${sl4j.version}</version>
+	  	</dependency>
+	  	
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency> 
+		 	
+	  </dependencies>
+  </dependencyManagement>
   
   <build>
     <plugins>

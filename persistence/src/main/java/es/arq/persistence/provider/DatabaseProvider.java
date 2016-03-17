@@ -4,7 +4,13 @@ import es.arq.persistence.provider.exceptions.PersistenceException;
 
 public interface DatabaseProvider {
 
-	public DatabaseProvider getConnection();
+	/**
+	 * Returns connection to a specific database
+	 * 
+	 * @return
+	 * @throws PersistenceException
+	 */
+	public DatabaseProvider getConnection() throws PersistenceException;
 	
 	/**
 	 * Inserts JSON document

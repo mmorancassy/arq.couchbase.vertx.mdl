@@ -1,7 +1,10 @@
 package es.arq.persistence.provider;
 
-import java.net.URI;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -14,6 +17,7 @@ import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.RawJsonDocument;
 
 import es.arq.persistence.provider.exceptions.PersistenceException;
+import es.arq.persistence.provider.properties.ConnectionProperties;
 
 public class CouchBasePersistenceImpl implements DatabaseProvider {
 
@@ -24,33 +28,51 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	private static DatabaseProvider connection = null;
 	
 	// Cluster nodes
-	private List<URI> nodeList = null;
-	
-	// Bucket username
-	private String username = null;
+	private static List<String> nodeList = null;
 	
 	// Bucket password
-	private String password = null;
+	private static String password = null;
 	
 	// Bucket name
-	private String bucketName = null;
+	private static String bucketName = null;
 	
 	// The Bucket
-	private Bucket bucket = null;
+	private static Bucket bucket = null;
 	
-	protected CouchBasePersistenceImpl() {}
+	// Connection properties
+	private Properties persistenceProperties = null;
+	
+	protected CouchBasePersistenceImpl() {
+		try {
+			InputStream is = this.getClass().getResourceAsStream("/persistence.properties");
+			persistenceProperties = new Properties();
+			persistenceProperties.load(is);
+			
+			String nodes = (String)persistenceProperties.get(ConnectionProperties.DB_PROVIDER_NODES);
+			nodeList = new ArrayList<String>(Arrays.asList(nodes.split(",")));
+			bucketName = (String) persistenceProperties.get(ConnectionProperties.DB_PROVIDER_BUCKET);
+			password = (String) persistenceProperties.get(ConnectionProperties.DB_PROVIDER_PASSWORD);
+			
+		} catch (Exception e) {
+			LOG.error("Se ha producido un error al cargar el fichero de configuración persistence.properties", e);
+		}
+	}
 
-	@Override
-	public DatabaseProvider getConnection() {
+	public static DatabaseProvider getInstance() {
 		if (connection == null) {
 			connection = new CouchBasePersistenceImpl();
 			
-			Cluster cluster = CouchbaseCluster.create();
+			Cluster cluster = CouchbaseCluster.create(nodeList);
 			bucket = cluster.openBucket(bucketName);
 			
 			LOG.info("Connection to host has been stablished");
 		}
 		
+		return connection;
+	}
+
+	@Override
+	public DatabaseProvider getConnection() throws PersistenceException {
 		return connection;
 	}
 
