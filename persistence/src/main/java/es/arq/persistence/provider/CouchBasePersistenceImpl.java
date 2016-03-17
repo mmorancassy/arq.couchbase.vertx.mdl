@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -22,7 +21,7 @@ import es.arq.persistence.provider.properties.ConnectionProperties;
 public class CouchBasePersistenceImpl implements DatabaseProvider {
 
 	// The Logger
-	private final static Logger LOG = LoggerFactory.getLogger(CouchBasePersistenceImpl.class);
+	private final static Logger LOG = Logger.getLogger(CouchBasePersistenceImpl.class);
 	
 	// Singleton instance
 	private static DatabaseProvider connection = null;

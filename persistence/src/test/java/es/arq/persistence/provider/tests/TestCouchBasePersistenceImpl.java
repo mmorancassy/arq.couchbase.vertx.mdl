@@ -3,9 +3,8 @@ package es.arq.persistence.provider.tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import es.arq.persistence.provider.CouchBasePersistenceImpl;
 import es.arq.persistence.provider.DatabaseProvider;
@@ -14,7 +13,7 @@ import es.arq.persistence.provider.exceptions.PersistenceException;
 public class TestCouchBasePersistenceImpl {
 	
 	// The Logger
-	private final static Logger LOG = LoggerFactory.getLogger(TestCouchBasePersistenceImpl.class);
+	private final static Logger LOG = Logger.getLogger(TestCouchBasePersistenceImpl.class);
 
 	@Test
 	public void testGetConnection() {
