@@ -13,6 +13,14 @@ public interface DatabaseProvider {
 	public DatabaseProvider getConnection() throws PersistenceException;
 	
 	/**
+	 * Disconnect from database
+	 * 
+	 * @return
+	 * @throws PersistenceException
+	 */
+	public boolean disconnect() throws PersistenceException;
+	
+	/**
 	 * Inserts JSON document
 	 * 
 	 * @param document
@@ -31,18 +39,11 @@ public interface DatabaseProvider {
 	/**
 	 * Updates JSON document
 	 * 
+	 * @param documentId
 	 * @param document
 	 * @return
 	 */
-	public String update(String document) throws PersistenceException;
-	
-	/**
-	 * Updates JSON document or creates if not exists
-	 * 
-	 * @param document
-	 * @return
-	 */
-	public String upsert(String document) throws PersistenceException;
+	public String update(String documentId, String document) throws PersistenceException;
 	
 	/**
 	 * Retrieves JSON document
@@ -50,5 +51,13 @@ public interface DatabaseProvider {
 	 * @param documentId
 	 * @return
 	 */
-	public String query(String documentId) throws PersistenceException;
+	public String getById(String documentId) throws PersistenceException;
+	
+	/**
+	 * Retrieves JSON document
+	 * 
+	 * @param documentId
+	 * @return
+	 */
+	public String query(String query) throws PersistenceException;
 }

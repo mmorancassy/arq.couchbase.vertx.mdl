@@ -39,10 +39,13 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	// The Bucket
 	private static Bucket bucket = null;
 	
+	// Couchbase cluster
+	private static Cluster cluster = null;
+	
 	// Connection properties
 	private Properties persistenceProperties = null;
 	
-	protected CouchBasePersistenceImpl() {
+	protected CouchBasePersistenceImpl() throws Exception {
 		try {
 			InputStream is = this.getClass().getResourceAsStream("/persistence.properties");
 			persistenceProperties = new Properties();
@@ -55,17 +58,23 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 			
 		} catch (Exception e) {
 			LOG.error("Se ha producido un error al cargar el fichero de configuración persistence.properties", e);
+			throw e;
 		}
 	}
 
-	public static DatabaseProvider getInstance() {
-		if (connection == null) {
-			connection = new CouchBasePersistenceImpl();
-			
-			Cluster cluster = CouchbaseCluster.create(nodeList);
-			bucket = cluster.openBucket(bucketName);
-			
-			LOG.info("Connection to host has been stablished");
+	public static DatabaseProvider getInstance() throws PersistenceException {
+		try {
+			if (connection == null) {
+				connection = new CouchBasePersistenceImpl();
+				
+				cluster = CouchbaseCluster.create(nodeList);
+				bucket = cluster.openBucket(bucketName);
+				
+				LOG.info("Connection to bucket: " + bucketName + " on host has been stablished");
+			}
+		} catch (Exception e) {
+			LOG.error("An error has occured during database connection", e);
+			throw new PersistenceException("An error has occured during database connection", e);
 		}
 		
 		return connection;
@@ -74,6 +83,20 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	@Override
 	public DatabaseProvider getConnection() throws PersistenceException {
 		return connection;
+	}
+	
+	@Override
+	public boolean disconnect() throws PersistenceException {
+		try {
+			if (connection != null) {	
+				return cluster.disconnect();
+			}
+		} catch (Exception e) {
+			LOG.error("An error has occured during database disconnect", e);
+			throw new PersistenceException("An error has occured during database disconnect", e);
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -110,53 +133,42 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	}
 
 	@Override
-	public String update(String document) throws PersistenceException {
-		String objectId = null;
+	public String update(String documentId, String document) throws PersistenceException {
+		String storedDocument = null;
 		
 		try {
-			RawJsonDocument jsondoc = RawJsonDocument.create(document);
+			RawJsonDocument jsondoc = RawJsonDocument.create(documentId, document);
 			RawJsonDocument stored = bucket.replace(jsondoc);
-			objectId = stored.id();
+			storedDocument = stored.content();
 			
 		} catch (Exception e) {
 			LOG.error("An error has occured during update document", e);
 			throw new PersistenceException("An error has occured during update document", e);
 		}
 		
-		return objectId;
-	}
-	
-	@Override
-	public String upsert(String document) throws PersistenceException {
-		String objectId = null;
-		
-		try {
-			RawJsonDocument jsondoc = RawJsonDocument.create(document);
-			RawJsonDocument stored = bucket.upsert(jsondoc);
-			objectId = stored.id();
-			
-		} catch (Exception e) {
-			LOG.error("An error has occured during upsert document", e);
-			throw new PersistenceException("An error has occured during upsert document", e);
-		}
-		
-		return objectId;
+		return storedDocument;
 	}
 
 	@Override
-	public String query(String documentId) throws PersistenceException {
-		String document = null;
+	public String getById(String documentId) throws PersistenceException {
+		String storedDocument = null;
 		
 		try {
 			JsonDocument stored = bucket.get(documentId);
-			document = stored.toString();
+			storedDocument = stored.content().toString();
 			
 		} catch (Exception e) {
 			LOG.error("An error has occured during query document", e);
 			throw new PersistenceException("An error has occured during query document", e);
 		}
 		
-		return document;
+		return storedDocument;
+	}
+
+	@Override
+	public String query(String query) throws PersistenceException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
