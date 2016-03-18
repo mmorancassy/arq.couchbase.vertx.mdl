@@ -5,6 +5,10 @@ import io.vertx.ext.web.RoutingContext;
 
 public class PutRestHandler implements Handler<RoutingContext> {
 
+	public PutRestHandler() {
+		super();
+	}
+	
 	@Override
 	public void handle(RoutingContext arg0) {
 		// TODO Auto-generated method stub

@@ -54,7 +54,13 @@ public class RoutingServer extends AbstractVerticle {
 			HttpServer server = vertx.createHttpServer();
 			Router router = Router.router(vertx);
 			
-			router.route(HttpMethod.GET, "/home/index").handler(new GetRestHandler());			
+			router.route(HttpMethod.GET, "/home/index").handler(new GetRestHandler());	
+			router.route(HttpMethod.GET, "/home/:documentId").handler(new GetRestHandler());	
+			
+			// TODO
+			//router.route(HttpMethod.POST, "/home/index").handler(new PostRestHandler());
+			//router.route(HttpMethod.PUT, "/home/index").handler(new PutRestHandler());
+			//router.route(HttpMethod.DELETE, "/home/index").handler(new DeleteRestHandler());
 			
 			server.requestHandler(router::accept).listen(listenPort);
 			

@@ -166,7 +166,12 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 		
 		try {
 			JsonDocument stored = bucket.get(documentId);
-			storedDocument = stored.content().toString();
+			
+			if (stored != null) {
+				storedDocument = stored.content().toString();
+			} else {
+				storedDocument = "{\"noContent\": \"true\"}";
+			}
 			
 		} catch (Exception e) {
 			LOG.error("An error has occured during query document", e);
