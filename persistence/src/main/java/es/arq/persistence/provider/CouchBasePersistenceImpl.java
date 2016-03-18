@@ -23,6 +23,9 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	// The Logger
 	private final static Logger LOG = Logger.getLogger(CouchBasePersistenceImpl.class);
 	
+	// Configuration
+	private final static String CONFIG_PROPERTIES = "/persistence.properties";
+	
 	// Singleton instance
 	private static DatabaseProvider connection = null;
 	
@@ -46,7 +49,7 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	
 	protected CouchBasePersistenceImpl() throws Exception {
 		try {
-			InputStream is = this.getClass().getResourceAsStream("/persistence.properties");
+			InputStream is = this.getClass().getResourceAsStream(CONFIG_PROPERTIES);
 			persistenceProperties = new Properties();
 			persistenceProperties.load(is);
 			
@@ -93,10 +96,11 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	@Override
 	public boolean disconnect() throws PersistenceException {
 		try {
-			if (connection != null) {	
-				boolean status = cluster.disconnect();
+			if (connection != null) {					
+				boolean statusBucket = bucket.close();
+				boolean statusCluster = cluster.disconnect();				
 				connection = null;
-				return status;
+				return statusBucket && statusCluster;
 			}
 		} catch (Exception e) {
 			LOG.error("An error has occured during database disconnect", e);
