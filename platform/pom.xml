@@ -13,11 +13,27 @@
   <packaging>jar</packaging>
 
   <dependencies>
+  
+  	<!-- Vert.x -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
       <version>${vertx.version}</version>
     </dependency>  
+    
+  	<!-- Logger -->
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+	</dependency>  
+	
+	<!-- Persistence -->
+    <dependency>
+      <groupId>arq.base</groupId>
+      <artifactId>persistence</artifactId>
+      <version>${version}</version>
+    </dependency>  	
+	  
   </dependencies>
  
 </project>
