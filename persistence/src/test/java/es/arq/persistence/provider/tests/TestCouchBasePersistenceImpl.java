@@ -6,8 +6,9 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import es.arq.persistence.provider.CouchBasePersistenceImpl;
+import es.arq.persistence.provider.DataBaseProviderFactory;
 import es.arq.persistence.provider.DatabaseProvider;
+import es.arq.persistence.provider.enums.DBType;
 import es.arq.persistence.provider.exceptions.PersistenceException;
 
 public class TestCouchBasePersistenceImpl {
@@ -19,7 +20,7 @@ public class TestCouchBasePersistenceImpl {
 	public void testGetConnection() {
 		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = CouchBasePersistenceImpl.getInstance();
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			
 			assertTrue(databaseProvider.disconnect());
 		} catch (PersistenceException e) {
@@ -31,7 +32,7 @@ public class TestCouchBasePersistenceImpl {
 	public void testInsert() {
 		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = CouchBasePersistenceImpl.getInstance();
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String document = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(document);
 			
@@ -50,7 +51,7 @@ public class TestCouchBasePersistenceImpl {
 	public void testDelete() {
 		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = CouchBasePersistenceImpl.getInstance();
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String document = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(document);
 			
@@ -71,7 +72,7 @@ public class TestCouchBasePersistenceImpl {
 	public void testUpdate() {
 		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = CouchBasePersistenceImpl.getInstance();
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String documentInsert = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(documentInsert);
 			
@@ -93,7 +94,7 @@ public class TestCouchBasePersistenceImpl {
 	public void testGetById() {
 		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = CouchBasePersistenceImpl.getInstance();
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String documentInsert = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(documentInsert);
 			

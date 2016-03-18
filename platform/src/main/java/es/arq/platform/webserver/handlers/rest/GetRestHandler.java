@@ -7,8 +7,9 @@ import io.vertx.ext.web.RoutingContext;
 
 import org.apache.log4j.Logger;
 
-import es.arq.persistence.provider.CouchBasePersistenceImpl;
+import es.arq.persistence.provider.DataBaseProviderFactory;
 import es.arq.persistence.provider.DatabaseProvider;
+import es.arq.persistence.provider.enums.DBType;
 
 public class GetRestHandler implements Handler<RoutingContext>{
 
@@ -33,7 +34,7 @@ public class GetRestHandler implements Handler<RoutingContext>{
 			if (documentId != null && !"".equals(documentId)) {
 				LOG.info("Retrieve document with Id: " + documentId);
 				
-				DatabaseProvider databaseProvider = CouchBasePersistenceImpl.getInstance();
+				DatabaseProvider databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 				String document = databaseProvider.getById(documentId);
 				
 				response.write(document);
