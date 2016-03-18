@@ -64,12 +64,18 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	public static DatabaseProvider getInstance() throws PersistenceException {
 		try {
 			if (connection == null) {
-				connection = new CouchBasePersistenceImpl();
-				
-				cluster = CouchbaseCluster.create(nodeList);
-				bucket = cluster.openBucket(bucketName);
-				
-				LOG.info("Connection to bucket: " + bucketName + " on host has been stablished");
+				// Thread-safe - double checked locking
+				synchronized (CouchBasePersistenceImpl.class) {
+					if (connection == null) {
+						connection = new CouchBasePersistenceImpl();
+						
+						cluster = CouchbaseCluster.create(nodeList);
+						bucket = cluster.openBucket(bucketName);
+						
+						LOG.info("Connection to bucket: " + bucketName + " on host has been stablished");	
+					}
+					
+				}
 			}
 		} catch (Exception e) {
 			LOG.error("An error has occured during database connection", e);
@@ -88,7 +94,9 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	public boolean disconnect() throws PersistenceException {
 		try {
 			if (connection != null) {	
-				return cluster.disconnect();
+				boolean status = cluster.disconnect();
+				connection = null;
+				return status;
 			}
 		} catch (Exception e) {
 			LOG.error("An error has occured during database disconnect", e);
