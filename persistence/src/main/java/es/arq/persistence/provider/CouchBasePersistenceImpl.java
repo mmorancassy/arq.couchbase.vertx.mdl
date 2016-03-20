@@ -183,7 +183,7 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 
 	@Override
 	public String query(String query) throws PersistenceException {
-		// TODO Auto-generated method stub
+		// TODO Not implemented
 		return null;
 	}
 
