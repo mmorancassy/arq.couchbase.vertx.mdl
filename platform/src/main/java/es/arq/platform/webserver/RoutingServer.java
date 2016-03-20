@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.StaticHandler;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -54,6 +55,12 @@ public class RoutingServer extends AbstractVerticle {
 			HttpServer server = vertx.createHttpServer();
 			Router router = Router.router(vertx);
 			
+			StaticHandler staticHandler = StaticHandler.create();
+			staticHandler.setWebRoot("../front/webRoot");
+			staticHandler.setIndexPage("/main.html");
+			
+			//router.route(HttpMethod.GET, "/").handler(staticHandler);
+			router.route().handler(staticHandler);
 			router.route(HttpMethod.GET, "/home/index").handler(new GetRestHandler());	
 			router.route(HttpMethod.GET, "/home/:documentId").handler(new GetRestHandler());	
 			
