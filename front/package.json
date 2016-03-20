@@ -4,7 +4,8 @@
   "version": "1.0.0-SNAPSHOT",
   "private": true,
   "author" : "mmorancassy",
-  "dependencies": {
-    "material-design-lite": "1.1.2"
+  "devDependencies": {
+    "material-design-lite": "1.1.2",
+  	"react": "0.14.7"
   }
 }
