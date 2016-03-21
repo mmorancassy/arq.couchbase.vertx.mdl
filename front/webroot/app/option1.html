@@ -1,0 +1,35 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<title>CRUD MDL</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link rel="stylesheet" href="./node_modules/material-design-lite/material.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<script src="./node_modules/material-design-lite/material.min.js"></script>
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		
+		<script>	
+			$(document).ready(function() {
+			    $.ajax({
+					url: "http://localhost:8080/home/index"
+				    }).then(function(data) {
+				       $('.greeting-id').append(data);
+				       $('.greeting-content').append(data);
+				    });			
+			});			
+		</script>
+						
+	</head>
+	
+	<body>
+    
+		<div class="mdl-grid">
+		  <div class="mdl-cell mdl-cell--4-col">Content:</div>
+		  <div class="mdl-cell mdl-cell--4-col"><p class="greeting-id">The ID is </p></div>
+		  <div class="mdl-cell mdl-cell--4-col"><p class="greeting-content">The content is </p></div>
+		</div>
+
+	</body>	
+</html>		
+	
