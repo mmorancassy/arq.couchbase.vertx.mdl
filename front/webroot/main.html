@@ -4,16 +4,19 @@
 		<title>CRUD MDL</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		<link rel="stylesheet" href="./node_modules/material-design-lite/material.min.css">
-		<script src="./node_modules/material-design-lite/material.min.js"></script>
+		<link rel="stylesheet" href="node_modules/material-design-lite/material.min.css">
+		<script src="node_modules/material-design-lite/material.min.js"></script>
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		
+		
 		<script>
 			$(document).ready(function() {
 			    $.ajax({
-				url: "http://rest-service.guides.spring.io/greeting"
-			    }).then(function(data) {
-			       $('.greeting-id').append(data.id);
-			       $('.greeting-content').append(data.content);
-			    });
+					url: "http://localhost:8080/home/index"
+				    }).then(function(data) {
+				       $('.greeting-id').append(data);
+				       $('.greeting-content').append(data);
+				    });
 			});		
 		
 		</script>
@@ -30,27 +33,34 @@
 		      <div class="mdl-layout-spacer"></div>
 		      <!-- Navigation. We hide it in small screens. -->
 		      <nav class="mdl-navigation mdl-layout--large-screen-only">
-			<a class="mdl-navigation__link" href="">Link</a>
-			<a class="mdl-navigation__link" href="">Link</a>
-			<a class="mdl-navigation__link" href="">Link</a>
-			<a class="mdl-navigation__link" href="">Link</a>
+				<a class="mdl-navigation__link" href="/app/content.html">Link</a>
+				<a class="mdl-navigation__link" href="">Link</a>
+				<a class="mdl-navigation__link" href="">Link</a>
+				<a class="mdl-navigation__link" href="">Link</a>
 		      </nav>
 		    </div>
 		  </header>
 		  <div class="mdl-layout__drawer">
 		    <span class="mdl-layout-title">Opciones</span>
 		    <nav class="mdl-navigation">
-		      <a class="mdl-navigation__link" href="">Link</a>
-		      <a class="mdl-navigation__link" href="">Link</a>
-		      <a class="mdl-navigation__link" href="">Link</a>
-		      <a class="mdl-navigation__link" href="">Link</a>
+		      <a class="mdl-navigation__link" href="#">Link 1</a>
+		      <a class="mdl-navigation__link" href="#">Link 2</a>
+		      <a class="mdl-navigation__link" href="#">Link 3</a>
+		      <a class="mdl-navigation__link" href="#">Link 4</a>
 		    </nav>
 		  </div>
 		  <main class="mdl-layout__content">
-		    <div class="page-content"><!-- Your content goes here -->
+		    <div class="page-content">
 		    
-		        <!--- For disable spinner needs to remove attribute 'isactive' via scripting --> 
+				<div class="mdl-grid">
+				  <div class="mdl-cell mdl-cell--6-col"><p class="greeting-id">The ID is </p></div>
+				  <div class="mdl-cell mdl-cell--6-col"><p class="greeting-content">The content is </p></div>
+				  <div class="mdl-cell mdl-cell--6-col">1</div>
+				</div>
+
+		    <!--- For disable spinner needs to remove attribute 'isactive' via scripting 
 			<div class="mdl-spinner mdl-js-spinner is-active"></div>
+			--> 
 		    </div>
 		  </main>
 		 

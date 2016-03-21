@@ -1,11 +1,15 @@
 package es.arq.platform.webserver;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -26,6 +30,9 @@ public class RoutingServer extends AbstractVerticle {
 	// Default HTTP listen port
 	private int listenPort = 8080;
 	
+	// Static resources
+	private String webRootFolder = null;
+	
 	// Server properties
 	private Properties serverProperties = null;
 	
@@ -38,7 +45,8 @@ public class RoutingServer extends AbstractVerticle {
 			serverProperties = new Properties();
 			serverProperties.load(is);
 			
-			listenPort = Integer.valueOf((String)serverProperties.get(ServerProperties.LISTEN_PORT)).intValue();			
+			listenPort = Integer.valueOf((String)serverProperties.get(ServerProperties.LISTEN_PORT)).intValue();		
+			webRootFolder = serverProperties.get(ServerProperties.WEB_ROOT_FOLDER).toString();
 			
 		} catch(Exception e) {
 			LOG.error("It has has been an error during server properties loading", e);
@@ -55,12 +63,13 @@ public class RoutingServer extends AbstractVerticle {
 			HttpServer server = vertx.createHttpServer();
 			Router router = Router.router(vertx);
 			
-			StaticHandler staticHandler = StaticHandler.create();
-			staticHandler.setWebRoot("../front/webRoot");
-			staticHandler.setIndexPage("/main.html");
+			// Enable CORS
+			router.route().handler(CorsHandler.create("*")
+					.allowedMethod(HttpMethod.GET)
+					.allowedMethod(HttpMethod.POST)                                       
+					.allowedMethod(HttpMethod.PUT)
+				  	.allowedMethod(HttpMethod.DELETE));
 			
-			//router.route(HttpMethod.GET, "/").handler(staticHandler);
-			router.route().handler(staticHandler);
 			router.route(HttpMethod.GET, "/home/index").handler(new GetRestHandler());	
 			router.route(HttpMethod.GET, "/home/:documentId").handler(new GetRestHandler());	
 			
@@ -68,6 +77,14 @@ public class RoutingServer extends AbstractVerticle {
 			//router.route(HttpMethod.POST, "/home/index").handler(new PostRestHandler());
 			//router.route(HttpMethod.PUT, "/home/index").handler(new PutRestHandler());
 			//router.route(HttpMethod.DELETE, "/home/index").handler(new DeleteRestHandler());
+			
+			StaticHandler staticHandler = StaticHandler.create();
+			staticHandler.setWebRoot(webRootFolder);
+			staticHandler.setIndexPage("/main.html");
+			
+			router.route().handler(staticHandler);			
+			
+			// TODO login redirect
 			
 			server.requestHandler(router::accept).listen(listenPort);
 			

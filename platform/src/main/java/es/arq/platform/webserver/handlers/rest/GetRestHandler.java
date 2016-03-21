@@ -37,23 +37,23 @@ public class GetRestHandler implements Handler<RoutingContext>{
 				DatabaseProvider databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 				String document = databaseProvider.getById(documentId);
 				
-				response.write(document);
+				response.setStatusCode(200);
+				response.end(document);
 				
 			} else {
-				response.write("Hello World!");
+				response.setStatusCode(200);
+				response.end("{\"helloWorld\": \"OK\"}");
 			}
 								
-			response.setStatusCode(200);
-			response.end();
+
 			
 		} catch (Exception e) {
 			response.setChunked(true);
 			response.putHeader("content-type", "text/plain");
-			response.write(e.getMessage());
 			
 			// Not found
 			response.setStatusCode(204);
-			response.end();
+			response.end(e.getMessage());
 		}
 		
 	}
