@@ -12,10 +12,47 @@
 		<script>	
 			$(document).ready(function() {
 			    $.ajax({
-					url: "http://localhost:8080/home/index"
+					url: "http://localhost:8080/documents"
 				    }).then(function(data) {
-				       $('.greeting-id').append(data);
-				       $('.greeting-content').append(data);
+				       
+				       var obj = JSON.parse(data);
+				       
+				       for(var i=0; i < 5; i++) {
+					       var row = document.createElement('tr');
+					       
+					       row.id = "777777777777777777777777777";
+					       
+					       var column1 = document.createElement('td');
+	  					   var textNode = document.createTextNode(obj.interpreter);
+	  					   column1.appendChild(textNode);
+	  					   column1.className = 'mdl-data-table__cell--non-numeric';
+	  					   
+	  					   row.appendChild(column1);			   
+	  					   
+					       var column2 = document.createElement('td');
+	  					   var textNode = document.createTextNode(obj.title);
+	  					   column2.appendChild(textNode);
+	  					   column2.className = 'mdl-data-table__cell--non-numeric';
+	  					   
+	  					   row.appendChild(column2);
+	  					     					   
+					       var column3 = document.createElement('td');
+	  					   var textNode = document.createTextNode(obj.format);
+	  					   column3.appendChild(textNode);
+	  					   column3.className = 'mdl-data-table__cell--non-numeric';
+	  					   
+	  					   row.appendChild(column3);					   
+	  					   
+					       var column4 = document.createElement('td');
+	  					   var textNode = document.createTextNode(obj.year);
+	  					   column4.appendChild(textNode);
+	  					   column4.className = 'mdl-data-table__cell--non-numeric';  	
+	  					   
+	  					   row.appendChild(column4);				     					     					   
+	  					    
+	  					   componentHandler.upgradeElement(row);
+	  					   document.getElementById('resultTable').appendChild(row);
+  					   }
 				    });
 			});			
 		</script>
@@ -26,8 +63,21 @@
     
 		<div class="mdl-grid">
 		  <div class="mdl-cell mdl-cell--4-col">Content:</div>
-		  <div class="mdl-cell mdl-cell--4-col"><p class="greeting-id">The ID is </p></div>
-		  <div class="mdl-cell mdl-cell--4-col"><p class="greeting-content">The content is </p></div>
+		  <div class="mdl-cell mdl-cell--8-col">
+			<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+			  <thead>
+			    <tr>
+			      <th class="mdl-data-table__cell--non-numeric">Interpreter</th>
+			      <th>Title</th>
+			      <th>Format</th>
+			      <th>Year</th>
+			    </tr>
+			  </thead>
+			  <tbody id="resultTable">
+
+			  </tbody>
+			</table>		  
+		  </div> 
 		</div>
 
 	</body>	

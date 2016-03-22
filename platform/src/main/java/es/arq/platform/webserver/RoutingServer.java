@@ -70,13 +70,19 @@ public class RoutingServer extends AbstractVerticle {
 					.allowedMethod(HttpMethod.PUT)
 				  	.allowedMethod(HttpMethod.DELETE));
 			
-			router.route(HttpMethod.GET, "/home/index").handler(new GetRestHandler());	
-			router.route(HttpMethod.GET, "/home/:documentId").handler(new GetRestHandler());	
+			// GET list of documents + GET document with documentId
+			router.route(HttpMethod.GET, "/documents").handler(new GetRestHandler());	
+			router.route(HttpMethod.GET, "/documents/:documentId").handler(new GetRestHandler());	
 			
 			// TODO
-			//router.route(HttpMethod.POST, "/home/index").handler(new PostRestHandler());
-			//router.route(HttpMethod.PUT, "/home/index").handler(new PutRestHandler());
-			//router.route(HttpMethod.DELETE, "/home/index").handler(new DeleteRestHandler());
+			// POST
+			//router.route(HttpMethod.POST, "/documents").handler(new PostRestHandler());
+			
+			// PUT
+			//router.route(HttpMethod.PUT, "/documents/:document").handler(new PutRestHandler());
+			
+			// DELETE
+			//router.route(HttpMethod.DELETE, "/documents/:documentId").handler(new DeleteRestHandler());
 			
 			StaticHandler staticHandler = StaticHandler.create();
 			staticHandler.setWebRoot(webRootFolder);

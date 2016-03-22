@@ -3,6 +3,7 @@ package es.arq.platform.webserver.handlers.rest;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 
 import org.apache.log4j.Logger;
@@ -29,7 +30,7 @@ public class GetRestHandler implements Handler<RoutingContext>{
 			HttpServerRequest request = routingContext.request();
 			String documentId = request.params().get("documentId");
 			
-			response.putHeader("content-type", "text/plain");	
+			response.putHeader("content-type", "application/json; charset=utf-8");	
 			
 			if (documentId != null && !"".equals(documentId)) {
 				LOG.info("Retrieve document with Id: " + documentId);
@@ -38,11 +39,12 @@ public class GetRestHandler implements Handler<RoutingContext>{
 				String document = databaseProvider.getById(documentId);
 				
 				response.setStatusCode(200);
-				response.end(document);
+				response.end(Json.encodePrettily(document));
 				
 			} else {
+				String mockJson = "{ \"interpreter\": \"Monster Magnet\", 	\"title\": \"God Says No\", 	\"year\": 2001, 	\"format\": \"Vinyl\"}";
 				response.setStatusCode(200);
-				response.end("{\"helloWorld\": \"OK\"}");
+				response.end(Json.encodePrettily(mockJson));
 			}
 								
 
