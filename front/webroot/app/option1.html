@@ -13,17 +13,17 @@
 			$(document).ready(function() {
 			    $.ajax({
 					url: "http://localhost:8080/documents"
-				    }).then(function(data) {
+				    }).then(function(data) {				       				       
 				       
-				       var obj = JSON.parse(data);
-				       
-				       for(var i=0; i < 5; i++) {
+				       for(var i=0; i < data.length; i++) {
+				       	   var obj = JSON.parse(data[i]);
+		
 					       var row = document.createElement('tr');
 					       
 					       row.id = "777777777777777777777777777";
 					       
 					       var column1 = document.createElement('td');
-	  					   var textNode = document.createTextNode(obj.interpreter);
+	  					   var textNode = document.createTextNode(obj.artist);
 	  					   column1.appendChild(textNode);
 	  					   column1.className = 'mdl-data-table__cell--non-numeric';
 	  					   
@@ -44,7 +44,7 @@
 	  					   row.appendChild(column3);					   
 	  					   
 					       var column4 = document.createElement('td');
-	  					   var textNode = document.createTextNode(obj.year);
+	  					   var textNode = document.createTextNode(obj.released);
 	  					   column4.appendChild(textNode);
 	  					   column4.className = 'mdl-data-table__cell--non-numeric';  	
 	  					   

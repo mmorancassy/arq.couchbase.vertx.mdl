@@ -1,5 +1,8 @@
 package es.arq.platform.webserver.handlers.rest;
 
+import java.util.Collection;
+import java.util.Map;
+
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -30,21 +33,24 @@ public class GetRestHandler implements Handler<RoutingContext>{
 			HttpServerRequest request = routingContext.request();
 			String documentId = request.params().get("documentId");
 			
+			DatabaseProvider databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
+			
 			response.putHeader("content-type", "application/json; charset=utf-8");	
 			
 			if (documentId != null && !"".equals(documentId)) {
 				LOG.info("Retrieve document with Id: " + documentId);
-				
-				DatabaseProvider databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
+								
 				String document = databaseProvider.getById(documentId);
 				
 				response.setStatusCode(200);
 				response.end(Json.encodePrettily(document));
 				
 			} else {
-				String mockJson = "{ \"interpreter\": \"Monster Magnet\", 	\"title\": \"God Says No\", 	\"year\": 2001, 	\"format\": \"Vinyl\"}";
+				// TODO dealing with ids
+				Map<String, String> documents = databaseProvider.query("collection_view", 50);
+				Collection<String> documentList = documents.values();
 				response.setStatusCode(200);
-				response.end(Json.encodePrettily(mockJson));
+				response.end(Json.encodePrettily(documentList));
 			}
 								
 
