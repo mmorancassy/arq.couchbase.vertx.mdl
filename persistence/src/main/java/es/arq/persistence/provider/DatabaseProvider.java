@@ -1,5 +1,7 @@
 package es.arq.persistence.provider;
 
+import java.util.Map;
+
 import es.arq.persistence.provider.exceptions.PersistenceException;
 
 public interface DatabaseProvider {
@@ -54,10 +56,11 @@ public interface DatabaseProvider {
 	public String getById(String documentId) throws PersistenceException;
 	
 	/**
-	 * Retrieves JSON document
+	 * Retrieves JSON document Map<id,json>
 	 * 
-	 * @param documentId
+	 * @param query
+	 * @param limit
 	 * @return
 	 */
-	public String query(String query) throws PersistenceException;
+	public Map<String, String> query(String query, int limit) throws PersistenceException;
 }

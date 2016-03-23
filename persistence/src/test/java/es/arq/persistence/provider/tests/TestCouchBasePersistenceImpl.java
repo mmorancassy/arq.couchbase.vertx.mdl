@@ -3,6 +3,8 @@ package es.arq.persistence.provider.tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
@@ -110,10 +112,23 @@ public class TestCouchBasePersistenceImpl {
 			fail(e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testQuery() {
-		assertTrue(true);
+		DatabaseProvider databaseProvider = null;
+		try {
+			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
+			String queryView = "collection_view";						
+			
+			Map<String, String> retrieveDocuments = databaseProvider.query(queryView, 1000);
+			
+			databaseProvider.disconnect();
+
+			assertTrue(retrieveDocuments != null && retrieveDocuments.size() > 0);
+			
+		} catch (PersistenceException e) {
+			fail(e.getMessage());
+		}
 	}	
 
 }

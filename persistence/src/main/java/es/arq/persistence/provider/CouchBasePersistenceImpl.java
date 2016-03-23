@@ -3,7 +3,9 @@ package es.arq.persistence.provider;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -14,6 +16,9 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.RawJsonDocument;
+import com.couchbase.client.java.view.ViewQuery;
+import com.couchbase.client.java.view.ViewResult;
+import com.couchbase.client.java.view.ViewRow;
 
 import es.arq.persistence.provider.exceptions.PersistenceException;
 import es.arq.persistence.provider.properties.ConnectionProperties;
@@ -25,6 +30,9 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	
 	// Configuration
 	private final static String CONFIG_PROPERTIES = "/persistence.properties";
+	
+	// Design Couchbase View
+	private final static String DESIGN_VIEW = "dev_collection";
 	
 	// Singleton instance
 	private static DatabaseProvider connection = null;
@@ -182,9 +190,29 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	}
 
 	@Override
-	public String query(String query) throws PersistenceException {
-		// TODO Not implemented
-		return null;
+	public Map<String, String> query(String query, int limit) throws PersistenceException {
+		Map<String, String> resultList = null;
+		try {
+		
+			ViewResult result = bucket.query(ViewQuery.from(DESIGN_VIEW, query).limit(limit));			
+			
+			if (result != null) {
+				resultList = new HashMap<String, String>();
+				
+				LOG.info("Retrieved " + result.totalRows() + " documents from view dev_collection/" + query);
+
+				for (ViewRow row : result) {
+				   LOG.info("Document retrieved from view: " + row.key() + " - " + row.value());
+				   
+				   resultList.put(row.key().toString(), row.value().toString());
+				}
+			}
+		} catch (Exception e) {
+			LOG.error("An error has occured during query to a view " + query, e);
+			throw new PersistenceException("An error has occured during query to a view " + query, e);
+		}
+		
+		return resultList;
 	}
 
 }
