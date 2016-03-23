@@ -13,14 +13,20 @@
   <packaging>jar</packaging>
   
   <build>
+    <resources>
+      <resource>
+        <directory>webroot</directory>
+      </resource>
+    </resources>
+      
   	<plugins>
 		<plugin>
 			<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>${basedir}/src/main/assembly/resources.xml</descriptor>
-					</descriptors>
-				</configuration>
+			<configuration>
+				<descriptors>
+					<descriptor>${basedir}/src/main/assembly/resources.xml</descriptor>
+				</descriptors>
+			</configuration>
 			<executions>
 				<execution>
 					<id>assemble</id>
@@ -30,7 +36,7 @@
 					</goals>
 				</execution>
 			</executions>
-		</plugin>
+		</plugin>		
  	</plugins>
   </build>
    	
