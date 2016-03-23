@@ -9,7 +9,7 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>${basedir}/webroot</directory>
+            <directory>${basedir}/src/main/webroot</directory>
             <outputDirectory>webroot</outputDirectory>
             <includes>
                 <include>**</include>
