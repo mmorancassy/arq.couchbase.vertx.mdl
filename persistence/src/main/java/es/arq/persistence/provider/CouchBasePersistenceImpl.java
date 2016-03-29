@@ -31,6 +31,7 @@ public class CouchBasePersistenceImpl implements DatabaseProvider {
 	// Configuration
 	private final static String CONFIG_PROPERTIES = "/persistence.properties";
 	
+	// TODO externalize to properties file and for multiples views
 	// Design Couchbase View
 	private final static String DESIGN_VIEW = "dev_collection";
 	
