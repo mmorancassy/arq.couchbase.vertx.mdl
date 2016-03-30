@@ -1,13 +1,9 @@
  <!DOCTYPE html>
 <html>
 	<head>
-		<title>CRUD MDL</title>
+		<title>Importador Discogs</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		<link rel="stylesheet" href="./node_modules/material-design-lite/material.min.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<script src="./node_modules/material-design-lite/material.min.js"></script>
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		
 		<script>	
 			$(document).ready(function() {
@@ -15,7 +11,7 @@
 					url: "http://localhost:8080/documents"
 				    }).then(function(data) {				       				       
 				       
-				       for(var i=0; i < data.length; i++) {
+				       for(var i=0; i < 10; i++) {
 				       	   var obj = JSON.parse(data[i]);
 		
 					       var row = document.createElement('tr');
@@ -52,26 +48,35 @@
 	  					    
 	  					   componentHandler.upgradeElement(row);
 	  					   document.getElementById('resultTable').appendChild(row);
-  					   }
+  					   }  					
 				    });
 			});			
 		</script>
 						
 	</head>
 	
+	<style>
+		table {
+			width:100%;
+		}
+		th {
+			background-color: #EFF8FB;
+		} 	
+	</style>
+	
 	<body>
-    
-		<div class="mdl-grid">
-		  <div class="mdl-cell mdl-cell--4-col">Content:</div>
-		  <div class="mdl-cell mdl-cell--8-col">
+		
+    	<!-- 12 columns for Desktop -->
+		<div class="mdl-grid">		  
+		  <div class="mdl-cell mdl-cell--12-col">
 		  
 			<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 			  <thead>
 			    <tr>
 			      <th class="mdl-data-table__cell--non-numeric">Interpreter</th>
-			      <th>Title</th>
-			      <th>Format</th>
-			      <th>Year</th>
+			      <th class="mdl-data-table__cell--non-numeric">Title</th>
+			      <th class="mdl-data-table__cell--non-numeric">Format</th>
+			      <th class="mdl-data-table__cell--non-numeric">Year</th>
 			    </tr>
 			  </thead>
 			  <tbody id="resultTable">
