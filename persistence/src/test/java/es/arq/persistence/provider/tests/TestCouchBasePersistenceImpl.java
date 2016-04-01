@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import es.arq.persistence.provider.DataBaseProviderFactory;
@@ -15,16 +17,31 @@ import es.arq.persistence.provider.exceptions.PersistenceException;
 
 public class TestCouchBasePersistenceImpl {
 	
+	// Connection
+	private static DatabaseProvider databaseProvider = null;
+	
 	// The Logger
 	private final static Logger LOG = Logger.getLogger(TestCouchBasePersistenceImpl.class);
 
-	@Test
-	public void testGetConnection() {
-		DatabaseProvider databaseProvider = null;
+	@BeforeClass
+	public static void establishConnection() {
 		try {
 			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			
-			assertTrue(databaseProvider.disconnect());
+			LOG.info("Connection to couchbase database established");
+			
+		} catch (PersistenceException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@AfterClass
+	public static void closeConnection() {
+		try {
+			boolean status = databaseProvider.disconnect();
+			
+			LOG.info("Couchbase database sucessfully disconnected: " + status);
+			
 		} catch (PersistenceException e) {
 			fail(e.getMessage());
 		}
@@ -32,15 +49,11 @@ public class TestCouchBasePersistenceImpl {
 
 	@Test
 	public void testInsert() {
-		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String document = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(document);
 			
 			LOG.info("Document sucessfully inserted in bucket with id: " + id);
-			
-			databaseProvider.disconnect();
 			
 			assertTrue(id != null && !"".equals(id));
 			
@@ -51,17 +64,13 @@ public class TestCouchBasePersistenceImpl {
 
 	@Test
 	public void testDelete() {
-		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String document = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(document);
 			
 			LOG.info("Document sucessfully inserted in bucket with id: " + id);
 			
 			boolean status = databaseProvider.delete(id);
-			
-			databaseProvider.disconnect();
 			
 			assertTrue(status);
 			
@@ -72,9 +81,7 @@ public class TestCouchBasePersistenceImpl {
 
 	@Test
 	public void testUpdate() {
-		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String documentInsert = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(documentInsert);
 			
@@ -82,9 +89,7 @@ public class TestCouchBasePersistenceImpl {
 			
 			String documentUpdate = "{\"test\" : \"couchbase persistence test\", \"update\": \"OK\"}";
 			String updatedDocument = databaseProvider.update(id, documentUpdate);
-			
-			databaseProvider.disconnect();
-			
+
 			assertTrue(updatedDocument.equals(documentUpdate));
 			
 		} catch (PersistenceException e) {
@@ -94,17 +99,13 @@ public class TestCouchBasePersistenceImpl {
 		
 	@Test
 	public void testGetById() {
-		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String documentInsert = "{\"test\" : \"couchbase persistence test\"}";
 			String id = databaseProvider.insert(documentInsert);
 			
 			LOG.info("Document sucessfully inserted in bucket with id: " + id);
 			
 			String retrieveDocument = databaseProvider.getById(id);
-			
-			databaseProvider.disconnect();
 
 			assertTrue(retrieveDocument != null && !"".equals(retrieveDocument));
 			
@@ -115,16 +116,14 @@ public class TestCouchBasePersistenceImpl {
 
 	@Test
 	public void testQuery() {
-		DatabaseProvider databaseProvider = null;
 		try {
-			databaseProvider = DataBaseProviderFactory.getInstance(DBType.COUCHBASE);
 			String queryView = "collection_view";						
 			
 			Map<String, String> retrieveDocuments = databaseProvider.query(queryView, 1000);
 			
-			databaseProvider.disconnect();
+			LOG.info("Number of documents retrieve from bucket: " + retrieveDocuments.size());
 
-			assertTrue(retrieveDocuments != null && retrieveDocuments.size() > 0);
+			assertTrue(retrieveDocuments != null);
 			
 		} catch (PersistenceException e) {
 			fail(e.getMessage());
