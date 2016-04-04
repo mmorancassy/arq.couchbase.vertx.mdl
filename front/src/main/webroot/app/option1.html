@@ -16,7 +16,7 @@
 		
 					       var row = document.createElement('tr');
 					       
-					       row.id = "777777777777777777777777777";
+					       row.id = obj.release_id;
 					       
 					       var column1 = document.createElement('td');
 	  					   var textNode = document.createTextNode(obj.artist);
@@ -44,11 +44,12 @@
 	  					   column4.appendChild(textNode);
 	  					   column4.className = 'mdl-data-table__cell--non-numeric';  	
 	  					   
-	  					   row.appendChild(column4);				     					     					   
+	  					   row.appendChild(column4);
+	  					   row.onclick = (function() { alert("click me!" + this.id)});	     					     					   
 	  					    
 	  					   componentHandler.upgradeElement(row);
 	  					   document.getElementById('resultTable').appendChild(row);
-  					   }  					
+  					   }  				
 				    });
 			});			
 		</script>
@@ -69,7 +70,8 @@
     	<!-- 12 columns for Desktop -->
 		<div class="mdl-grid">		  
 		  <div class="mdl-cell mdl-cell--12-col">
-		  
+		  	<i class="mdi mdi-arrow-left"></i>
+		  	<i class="mdi mdi-arrow-right"></i>
 			<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 			  <thead>
 			    <tr>
