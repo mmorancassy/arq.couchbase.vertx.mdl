@@ -19,8 +19,10 @@ public class DataBaseProviderFactory {
 				break;
 			case MONGODB:
 				instance = null; // TODO not implemented yet
+				break;
 			case COUCHDB:
 				instance = null; // TODO not implemented yet
+				break;
 			default:
 				break;
 			}
